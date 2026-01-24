@@ -2,7 +2,6 @@
 using _Project.Develop.Runtime.Gameplay.Services;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
-using _Project.Develop.Runtime.Utilities.ObjectsLifetimeManagement;
 
 namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 {

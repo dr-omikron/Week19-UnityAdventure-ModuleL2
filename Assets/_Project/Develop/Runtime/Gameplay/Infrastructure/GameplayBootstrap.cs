@@ -37,6 +37,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
         {
             _projectServicesFactory = new ProjectServicesFactory(_container);
             GameplayServicesFactory gameplayServicesFactory = new GameplayServicesFactory(_container);
+            _coroutinesPerformer = _projectServicesFactory.GetCoroutinesPerformer();
 
             _objectsUpdater = _projectServicesFactory.GetObjectsUpdater();
             GameplayPlayerInputs gameplayPlayerInputs = gameplayServicesFactory.GetGameplayPlayerInputs();
@@ -69,7 +70,6 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
         public override void Run()
         {
             _isRun = true;
-            Debug.Log("Gameplay running...");
             _coroutinesPerformer.StartPerform(_gameCycle.Start());
         }
     }

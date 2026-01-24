@@ -16,6 +16,8 @@ namespace _Project.Develop.Runtime.Gameplay.Services
             Losses = 0;
         }
 
+        public bool IsNotZeroProgress() => Losses != 0 || Wins != 0;
+
         public void SetProgress(int wins, int losses)
         {
             if(wins < 0)

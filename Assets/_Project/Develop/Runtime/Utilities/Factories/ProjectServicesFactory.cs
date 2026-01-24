@@ -28,5 +28,6 @@ namespace _Project.Develop.Runtime.Utilities.Factories
         public ObjectsUpdater GetObjectsUpdater() => _container.Resolve<ObjectsUpdater>();
         public PlayerProgressTracker GetPlayerProgressTracker() => _container.Resolve<PlayerProgressTracker>();
         public WalletService GetWalletService() => _container.Resolve<WalletService>();
+
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using _Archero.Develop.Runtime.Utilities.Reactive;
+using _Project.Develop.Runtime.Utilities.Reactive;
 
 namespace _Project.Develop.Runtime.Meta.Features
 {
@@ -19,7 +20,7 @@ namespace _Project.Develop.Runtime.Meta.Features
             if(amount < 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
 
-            return amount >= _gold.Value;
+            return amount <= _gold.Value;
         }
 
         public void Add(int amount)

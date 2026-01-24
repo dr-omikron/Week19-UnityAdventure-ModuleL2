@@ -14,4 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SymbolsConfig>k__BackingField: {fileID: 11400000, guid: 6d411ea6f4a45734f862c2be77b42dce,
     type: 2}
-  <SequenceLenght>k__BackingField: 8
+  <SequenceLenght>k__BackingField: 3
+  <DefaultGoldAmount>k__BackingField: 5
+  <WinGoldAmount>k__BackingField: 10
+  <DefeatGoldAmount>k__BackingField: 5
+  <ResetPrice>k__BackingField: 20
