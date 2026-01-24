@@ -43,14 +43,11 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 
             _objectsUpdater.Add(gameplayPlayerInputs);
 
-            _coroutinesPerformer = _projectServicesFactory.GetCoroutinesPerformer();
-            SceneSwitcherService sceneSwitcherService = _projectServicesFactory.GetSceneSwitcherService();
-
             _gameCycle = new GameCycle(
                 gameplayServicesFactory,
+                _projectServicesFactory,
                 gameplayPlayerInputs,
                 _coroutinesPerformer,
-                sceneSwitcherService,
                 _inputArgs);
 
             yield return null;

@@ -1,4 +1,6 @@
-﻿using _Project.Develop.Runtime.Infrastructure.DI;
+﻿using _Project.Develop.Runtime.Gameplay.Services;
+using _Project.Develop.Runtime.Infrastructure.DI;
+using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.AssetsManagement;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
@@ -24,5 +26,7 @@ namespace _Project.Develop.Runtime.Utilities.Factories
         public SceneSwitcherService GetSceneSwitcherService() => _container.Resolve<SceneSwitcherService>();
         public ILoadingScreen GetStandardLoadingScreen() => _container.Resolve<ILoadingScreen>();
         public ObjectsUpdater GetObjectsUpdater() => _container.Resolve<ObjectsUpdater>();
+        public PlayerProgressTracker GetPlayerProgressTracker() => _container.Resolve<PlayerProgressTracker>();
+        public WalletService GetWalletService() => _container.Resolve<WalletService>();
     }
 }

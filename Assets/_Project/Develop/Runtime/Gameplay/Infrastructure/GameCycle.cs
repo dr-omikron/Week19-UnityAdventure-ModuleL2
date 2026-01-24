@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using _Project.Develop.Runtime.Gameplay.Configs;
 using _Project.Develop.Runtime.Gameplay.Inputs;
 using _Project.Develop.Runtime.Gameplay.Services;
+using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using _Project.Develop.Runtime.Utilities.Factories;
 using _Project.Develop.Runtime.Utilities.PlayerInput;
@@ -14,27 +15,35 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
     public class GameCycle : IDisposable
     {
         private readonly GameplayServicesFactory _gameplayServicesFactory;
+        private readonly ProjectServicesFactory _projectServicesFactory;
         private readonly GameplayPlayerInputs _gameplayPlayerInputs;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
-        private readonly SceneSwitcherService _sceneSwitcherService;
         private readonly GameplayInputArgs _inputArgs;
+
+        private PlayerProgressTracker _playerProgressTracker;
+        private WalletService _walletService;
+        private LevelConfig _levelConfig;
 
         public GameCycle(
             GameplayServicesFactory gameplayServicesFactory, 
+            ProjectServicesFactory projectServicesFactory, 
             GameplayPlayerInputs gameplayPlayerInputs, 
             ICoroutinesPerformer coroutinesPerformer,
-            SceneSwitcherService sceneSwitcherService,
             GameplayInputArgs inputArgs)
         {
             _gameplayServicesFactory = gameplayServicesFactory;
+            _projectServicesFactory = projectServicesFactory;
             _gameplayPlayerInputs = gameplayPlayerInputs;
             _coroutinesPerformer = coroutinesPerformer;
-            _sceneSwitcherService = sceneSwitcherService;
             _inputArgs = inputArgs;
         }
 
         public IEnumerator Start()
         {
+            _playerProgressTracker = _projectServicesFactory.GetPlayerProgressTracker();
+            _levelConfig = _projectServicesFactory.GetConfigsProviderService().GetConfig<LevelConfig>();
+            _walletService = _projectServicesFactory.GetWalletService();
+
             SymbolsSequenceGenerator symbolsSequenceGenerator = _gameplayServicesFactory.GetSymbolsSequenceGenerator();
             string generated = symbolsSequenceGenerator.Generate(_inputArgs.Symbols, _inputArgs.SequenceLenght);
 
@@ -54,6 +63,9 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
             Debug.Log("Win");
             Debug.Log($"Press { KeyboardInputKeys.EndGameKey } to Return in Main Menu");
             _gameplayPlayerInputs.EndGameKeyDown += OnMainMenuReturn;
+
+            _playerProgressTracker.AddWin();
+            _walletService.Add(_levelConfig.WinGoldAmount);
         }
 
         private void ProcessDefeat()
@@ -61,6 +73,13 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
             Debug.Log("Defeat");
             Debug.Log($"Press { KeyboardInputKeys.EndGameKey } to Restart Game");
             _gameplayPlayerInputs.EndGameKeyDown += OnRestartGame;
+
+            _playerProgressTracker.AddLoss();
+
+            if(_walletService.Enough(_levelConfig.DefeatGoldAmount))
+                _walletService.Spend(_levelConfig.DefeatGoldAmount);
+            else
+                _walletService.Reset();
         }
 
         private void OnMainMenuReturn()
@@ -77,7 +96,8 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 
         private IEnumerator ReturnToMainMenu()
         {
-            yield return _sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu);
+            SceneSwitcherService sceneSwitcherService = _projectServicesFactory.GetSceneSwitcherService();
+            yield return sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu);
         }
 
         private void UnsubscribeAll()

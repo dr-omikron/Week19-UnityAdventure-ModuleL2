@@ -40,5 +40,7 @@ namespace _Project.Develop.Runtime.Meta.Features
 
             _gold.Value -= amount;
         }
+
+        public void Reset() => _gold.Value = 0;
     }
 }
