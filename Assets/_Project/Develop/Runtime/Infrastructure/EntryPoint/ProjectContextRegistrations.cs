@@ -1,4 +1,7 @@
-﻿using _Project.Develop.Runtime.Infrastructure.DI;
+﻿using _Archero.Develop.Runtime.Utilities.Reactive;
+using _Project.Develop.Runtime.Gameplay.Services;
+using _Project.Develop.Runtime.Infrastructure.DI;
+using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.AssetsManagement;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
@@ -20,6 +23,8 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle<ILoadingScreen>(CreateLoadingScreen);
             container.RegisterAsSingle(CreateSceneSwitcherService);
             container.RegisterAsSingle(CreateObjectsUpdater);
+            container.RegisterAsSingle(CreateWalletService);
+            container.RegisterAsSingle(CreatePlayerProgressTracker);
         }
 
         private static CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
@@ -60,5 +65,9 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
         }
 
         private static ObjectsUpdater CreateObjectsUpdater(DIContainer c) => new ObjectsUpdater();
+
+        private static WalletService CreateWalletService(DIContainer c) => new WalletService(new ReactiveVariable<int>());
+
+        private static PlayerProgressTracker CreatePlayerProgressTracker(DIContainer c) => new PlayerProgressTracker();
     }
 }
