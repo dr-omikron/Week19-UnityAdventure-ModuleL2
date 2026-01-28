@@ -1,6 +1,6 @@
 ﻿using System;
 using _Project.Develop.Runtime.Gameplay.Configs;
-using _Project.Develop.Runtime.Gameplay.Services;
+using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Meta.Infrastructure;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
 using UnityEngine;

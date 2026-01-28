@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _Project.Develop.Runtime.Gameplay.Services
+namespace _Project.Develop.Runtime.Gameplay.Features
 {
     public class PlayerProgressTracker
     {

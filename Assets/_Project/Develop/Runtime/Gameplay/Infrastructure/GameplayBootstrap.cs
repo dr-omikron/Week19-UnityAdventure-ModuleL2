@@ -14,7 +14,6 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
     public class GameplayBootstrap : SceneBootstrap
     {
         private DIContainer _container;
-        private ProjectServicesFactory _projectServicesFactory;
         private GameplayInputArgs _inputArgs;
         private ObjectsUpdater _objectsUpdater;
         private ICoroutinesPerformer _coroutinesPerformer;
@@ -35,21 +34,14 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 
         public override IEnumerator Initialize()
         {
-            _projectServicesFactory = new ProjectServicesFactory(_container);
-            GameplayServicesFactory gameplayServicesFactory = new GameplayServicesFactory(_container);
-            _coroutinesPerformer = _projectServicesFactory.GetCoroutinesPerformer();
+            _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
+            _objectsUpdater = _container.Resolve<ObjectsUpdater>();
 
-            _objectsUpdater = _projectServicesFactory.GetObjectsUpdater();
-            GameplayPlayerInputs gameplayPlayerInputs = gameplayServicesFactory.GetGameplayPlayerInputs();
-
+            GameplayPlayerInputs gameplayPlayerInputs = _container.Resolve<GameplayPlayerInputs>();
             _objectsUpdater.Add(gameplayPlayerInputs);
-
-            _gameCycle = new GameCycle(
-                gameplayServicesFactory,
-                _projectServicesFactory,
-                gameplayPlayerInputs,
-                _coroutinesPerformer,
-                _inputArgs);
+            
+            GameCycleFactory gameCycleFactory = _container.Resolve<GameCycleFactory>();
+            _gameCycle = gameCycleFactory.CreateGameCycle(_inputArgs);
 
             yield return null;
         }

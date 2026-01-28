@@ -1,7 +1,8 @@
-﻿using _Project.Develop.Runtime.Gameplay.Inputs;
-using _Project.Develop.Runtime.Gameplay.Services;
+﻿using _Project.Develop.Runtime.Gameplay.Features;
+using _Project.Develop.Runtime.Gameplay.Inputs;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using _Project.Develop.Runtime.Utilities.Factories;
 
 namespace _Project.Develop.Runtime.Gameplay.Infrastructure
 {
@@ -12,6 +13,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateGameplayPlayerInputs);
             container.RegisterAsSingle(CreateSymbolsSequenceGenerator);
             container.RegisterAsSingle(CreateInputStringReader);
+            container.RegisterAsSingle(CreateGameCycleFactory);
         }
 
         private static GameplayPlayerInputs CreateGameplayPlayerInputs(DIContainer c) => new GameplayPlayerInputs();
@@ -21,5 +23,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
             ICoroutinesPerformer coroutinesPerformer = c.Resolve<ICoroutinesPerformer>();
             return new InputStringReader(coroutinesPerformer);
         }
+
+        private static GameCycleFactory CreateGameCycleFactory(DIContainer c) => new GameCycleFactory(c);
     }
 }

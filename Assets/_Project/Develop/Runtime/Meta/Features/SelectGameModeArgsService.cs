@@ -6,7 +6,7 @@ using _Project.Develop.Runtime.Gameplay.Infrastructure;
 using _Project.Develop.Runtime.Meta.Infrastructure;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
 
-namespace _Project.Develop.Runtime.Gameplay.Services
+namespace _Project.Develop.Runtime.Meta.Features
 {
     public class SelectGameModeArgsService : IDisposable
     {

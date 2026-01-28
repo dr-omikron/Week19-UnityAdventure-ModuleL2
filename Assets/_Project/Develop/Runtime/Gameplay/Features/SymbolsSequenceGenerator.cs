@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Random = UnityEngine.Random;
 
-namespace _Project.Develop.Runtime.Gameplay.Services
+namespace _Project.Develop.Runtime.Gameplay.Features
 {
     public class SymbolsSequenceGenerator
     {

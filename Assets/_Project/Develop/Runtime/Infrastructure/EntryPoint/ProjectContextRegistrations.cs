@@ -1,5 +1,5 @@
 ﻿using _Archero.Develop.Runtime.Utilities.Reactive;
-using _Project.Develop.Runtime.Gameplay.Services;
+using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.AssetsManagement;

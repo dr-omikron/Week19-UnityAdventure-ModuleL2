@@ -1,7 +1,8 @@
-﻿using _Project.Develop.Runtime.Gameplay.Services;
+﻿using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
+using _Project.Develop.Runtime.Utilities.Factories;
 
 namespace _Project.Develop.Runtime.Meta.Infrastructure
 {
@@ -14,6 +15,7 @@ namespace _Project.Develop.Runtime.Meta.Infrastructure
             container.RegisterAsSingle(CreateSelectGameModeService);
             container.RegisterAsSingle(CreatePlayerProgressPrinter);
             container.RegisterAsSingle(CreatePlayerProgressRemover);
+            container.RegisterAsSingle(CreateMetaCycleFactory);
         }
 
         private static MainMenuPlayerInputs CreateMainMenuPlayerInputs(DIContainer c) => new MainMenuPlayerInputs();
@@ -43,5 +45,7 @@ namespace _Project.Develop.Runtime.Meta.Infrastructure
 
             return new PlayerProgressRemover(playerProgressTracker, walletService, mainMenuPlayerInputs, configsProviderService);
         }
+
+        private static MetaCycleFactory CreateMetaCycleFactory(DIContainer c) => new MetaCycleFactory(c);
     }
 }
