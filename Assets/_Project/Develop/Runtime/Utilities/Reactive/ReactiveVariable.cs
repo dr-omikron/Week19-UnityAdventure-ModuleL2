@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using _Project.Develop.Runtime.Utilities.Reactive;
 
-namespace _Archero.Develop.Runtime.Utilities.Reactive
+namespace _Project.Develop.Runtime.Utilities.Reactive
 {
     public class ReactiveVariable<T> : IReadOnlyVariable<T> where T : IEquatable<T>
     {
@@ -34,8 +33,8 @@ namespace _Archero.Develop.Runtime.Utilities.Reactive
             return subscriber;
         }
 
-        private void Remove(Subscriber<T, T> subscriber) => _toRemove.Remove(subscriber);
-        
+        private void Remove(Subscriber<T, T> subscriber) => _toRemove.Add(subscriber);
+
         private void Invoke(T oldValue, T newValue)
         {
             if (_toAdd.Count > 0)
