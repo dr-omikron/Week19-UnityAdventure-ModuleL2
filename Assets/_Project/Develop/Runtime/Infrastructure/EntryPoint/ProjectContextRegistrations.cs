@@ -1,6 +1,7 @@
 ﻿using _Project.Develop.Runtime.Gameplay.Configs;
 using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Infrastructure.DI;
+using _Project.Develop.Runtime.Meta.Configs;
 using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.AssetsManagement;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
@@ -93,9 +94,9 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
         private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)
         {
             ISaveLoadService saveLoadService = c.Resolve<ISaveLoadService>();
-            int defaultGoldAmount = c.Resolve<ConfigsProviderService>().GetConfig<LevelConfig>().DefaultGoldAmount;
+            StartPlayerDataConfig startPlayerData = c.Resolve<ConfigsProviderService>().GetConfig<StartPlayerDataConfig>();
 
-            return new PlayerDataProvider(saveLoadService, defaultGoldAmount);
+            return new PlayerDataProvider(saveLoadService, startPlayerData);
         }
     }
 }
