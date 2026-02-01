@@ -4,6 +4,10 @@ using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.AssetsManagement;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement.DataRepository;
+using _Project.Develop.Runtime.Utilities.DataManagement.KeyStorage;
+using _Project.Develop.Runtime.Utilities.DataManagement.Serializers;
 using _Project.Develop.Runtime.Utilities.LoadScreen;
 using _Project.Develop.Runtime.Utilities.ObjectsLifetimeManagement;
 using _Project.Develop.Runtime.Utilities.Reactive;
@@ -25,6 +29,7 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreateObjectsUpdater);
             container.RegisterAsSingle(CreateWalletService);
             container.RegisterAsSingle(CreatePlayerProgressTracker);
+            container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
         }
 
         private static CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
@@ -69,5 +74,17 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
         private static WalletService CreateWalletService(DIContainer c) => new WalletService(new ReactiveVariable<int>());
 
         private static PlayerProgressTracker CreatePlayerProgressTracker(DIContainer c) => new PlayerProgressTracker();
+
+        private static SaveLoadService CreateSaveLoadService(DIContainer c)
+        {
+            IDataSerializer dataSerializer = new JsonSerializer();
+            IDataKeyStorage dataKeyStorage = new MapDataKeysStorage();
+
+            string saveFolderPath = Application.persistentDataPath;
+
+            IDataRepository dataRepository = new LocalFileDataRepository(saveFolderPath, "json");
+
+            return new SaveLoadService(dataSerializer, dataKeyStorage, dataRepository);
+        }
     }
 }
