@@ -1,10 +1,12 @@
-﻿using _Project.Develop.Runtime.Gameplay.Features;
+﻿using _Project.Develop.Runtime.Gameplay.Configs;
+using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.AssetsManagement;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using _Project.Develop.Runtime.Utilities.DataManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using _Project.Develop.Runtime.Utilities.DataManagement.DataRepository;
 using _Project.Develop.Runtime.Utilities.DataManagement.KeyStorage;
 using _Project.Develop.Runtime.Utilities.DataManagement.Serializers;
@@ -30,6 +32,7 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreateWalletService);
             container.RegisterAsSingle(CreatePlayerProgressTracker);
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
+            container.RegisterAsSingle(CreatePlayerDataProvider);
         }
 
         private static CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
@@ -85,6 +88,14 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
             IDataRepository dataRepository = new LocalFileDataRepository(saveFolderPath, "json");
 
             return new SaveLoadService(dataSerializer, dataKeyStorage, dataRepository);
+        }
+
+        private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)
+        {
+            ISaveLoadService saveLoadService = c.Resolve<ISaveLoadService>();
+            int defaultGoldAmount = c.Resolve<ConfigsProviderService>().GetConfig<LevelConfig>().DefaultGoldAmount;
+
+            return new PlayerDataProvider(saveLoadService, defaultGoldAmount);
         }
     }
 }
