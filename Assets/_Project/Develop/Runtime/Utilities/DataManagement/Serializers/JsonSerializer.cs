@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using UnityEngine;
 
 namespace _Project.Develop.Runtime.Utilities.DataManagement.Serializers
 {
@@ -17,7 +16,6 @@ namespace _Project.Develop.Runtime.Utilities.DataManagement.Serializers
         {
             return JsonConvert.DeserializeObject<TData>(serializedData, new JsonSerializerSettings
             {
-                Formatting = Application.isEditor ? Formatting.Indented : Formatting.None,
                 TypeNameHandling = TypeNameHandling.Auto
             });
         }

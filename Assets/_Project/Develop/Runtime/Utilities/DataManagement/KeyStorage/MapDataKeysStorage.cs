@@ -7,7 +7,8 @@ namespace _Project.Develop.Runtime.Utilities.DataManagement.KeyStorage
     {
         private readonly Dictionary<Type, string> _keys = new Dictionary<Type, string>()
         {
-            { typeof(PlayerCurrency), "PlayerData" }
+            { typeof(PlayerCurrency), "PlayerCurrency" },
+            { typeof(PlayerStatistic), "PlayerStatistic" }
         };
 
         public string GetKeyFor<TData>() where TData : ISaveData => _keys[typeof(TData)];

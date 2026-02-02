@@ -3,7 +3,6 @@ using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using _Project.Develop.Runtime.Utilities.DataManagement;
-using _Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using _Project.Develop.Runtime.Utilities.LoadScreen;
 using _Project.Develop.Runtime.Utilities.SceneManagement;
 using UnityEngine;
@@ -37,7 +36,5 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
 
             yield return sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu);
         }
-
-        
     }
 }

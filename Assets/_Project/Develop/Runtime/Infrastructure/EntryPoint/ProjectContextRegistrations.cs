@@ -32,7 +32,7 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreateWalletService).NonLazy();
             container.RegisterAsSingle(CreatePlayerProgressTracker).NonLazy();
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
-            container.RegisterAsSingle(CreatePlayerDataProvider);
+            container.RegisterAsSingle(CreatePlayerCurrencyProvider);
             container.RegisterAsSingle(CreatePlayerStatisticProvider);
             container.RegisterAsSingle(CreateSavingFilesCheckService);
         }
@@ -94,12 +94,12 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
             return new SaveLoadService(dataSerializer, dataKeyStorage, dataRepository);
         }
 
-        private static PlayerCurrencyProvider CreatePlayerDataProvider(DIContainer c)
+        private static PlayerCurrencyProvider CreatePlayerCurrencyProvider(DIContainer c)
         {
             ISaveLoadService saveLoadService = c.Resolve<ISaveLoadService>();
-            StartPlayerDataConfig startPlayerData = c.Resolve<ConfigsProviderService>().GetConfig<StartPlayerDataConfig>();
+            ConfigsProviderService configsProviderService = c.Resolve<ConfigsProviderService>();
 
-            return new PlayerCurrencyProvider(saveLoadService, startPlayerData);
+            return new PlayerCurrencyProvider(saveLoadService, configsProviderService);
         }
 
         private static PlayerStatisticProvider CreatePlayerStatisticProvider(DIContainer c)
