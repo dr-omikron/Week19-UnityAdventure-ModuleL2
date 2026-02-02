@@ -5,6 +5,7 @@ using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Gameplay.Inputs;
 using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement;
 using _Project.Develop.Runtime.Utilities.PlayerInput;
 using _Project.Develop.Runtime.Utilities.SceneManagement;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
         private readonly SceneSwitcherService _sceneSwitcherService;
         private readonly GameplayPlayerInputs _gameplayPlayerInputs;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
+        private readonly SaveLoadDataProvidersService _saveLoadDataProvidersService;
         private readonly GameplayInputArgs _inputArgs;
 
 
@@ -33,6 +35,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
             SceneSwitcherService sceneSwitcherService,
             GameplayPlayerInputs gameplayPlayerInputs, 
             ICoroutinesPerformer coroutinesPerformer,
+            SaveLoadDataProvidersService saveLoadDataProvidersService,
             GameplayInputArgs inputArgs)
         {
             _playerProgressTracker = playerProgressTracker;
@@ -43,6 +46,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
             _sceneSwitcherService = sceneSwitcherService;
             _gameplayPlayerInputs = gameplayPlayerInputs;
             _coroutinesPerformer = coroutinesPerformer;
+            _saveLoadDataProvidersService = saveLoadDataProvidersService;
             _inputArgs = inputArgs;
         }
 
@@ -58,6 +62,8 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
                 ProcessWin();
             else
                 ProcessDefeat();
+
+            _saveLoadDataProvidersService.SaveAll();
         }
 
         private void ProcessWin()
@@ -75,7 +81,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
         {
             Debug.Log("Defeat");
             Debug.Log($"Press { KeyboardInputKeys.EndGameKey } to Restart Game");
-            
+
             _gameplayPlayerInputs.EndGameKeyDown += OnRestartGame;
 
             _playerProgressTracker.AddLoss();

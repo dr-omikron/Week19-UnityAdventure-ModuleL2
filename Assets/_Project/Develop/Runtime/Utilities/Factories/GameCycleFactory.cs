@@ -6,6 +6,7 @@ using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
 using _Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement;
 using _Project.Develop.Runtime.Utilities.SceneManagement;
 
 namespace _Project.Develop.Runtime.Utilities.Factories
@@ -19,7 +20,7 @@ namespace _Project.Develop.Runtime.Utilities.Factories
             _container = container;
         }
 
-        public GameCycle CreateGameCycle(GameplayInputArgs gameplayInputArgs)
+        public GameCycle Create(GameplayInputArgs gameplayInputArgs)
         {
             PlayerProgressTracker playerProgressTracker = _container.Resolve<PlayerProgressTracker>();
             LevelConfig levelConfig = _container.Resolve<ConfigsProviderService>().GetConfig<LevelConfig>();
@@ -29,6 +30,7 @@ namespace _Project.Develop.Runtime.Utilities.Factories
             SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
             GameplayPlayerInputs gameplayPlayerInputs = _container.Resolve<GameplayPlayerInputs>();
             ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
+            SaveLoadDataProvidersService saveLoadDataProvidersService = _container.Resolve<SaveLoadDataProvidersService>();
 
             return new GameCycle(
                 playerProgressTracker,
@@ -39,6 +41,7 @@ namespace _Project.Develop.Runtime.Utilities.Factories
                 sceneSwitcherService,
                 gameplayPlayerInputs,
                 coroutinesPerformer,
+                saveLoadDataProvidersService,
                 gameplayInputArgs);
         }
     }

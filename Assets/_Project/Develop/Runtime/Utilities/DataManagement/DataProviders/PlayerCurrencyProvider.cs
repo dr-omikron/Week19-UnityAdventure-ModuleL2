@@ -2,22 +2,20 @@
 
 namespace _Project.Develop.Runtime.Utilities.DataManagement.DataProviders
 {
-    public class PlayerDataProvider : DataProvider<PlayerData>
+    public class PlayerCurrencyProvider : DataProvider<PlayerCurrency>
     {
         private readonly StartPlayerDataConfig _startPlayerData;
 
-        public PlayerDataProvider(ISaveLoadService saveLoadService, StartPlayerDataConfig startPlayerData) : base(saveLoadService)
+        public PlayerCurrencyProvider(ISaveLoadService saveLoadService, StartPlayerDataConfig startPlayerData) : base(saveLoadService)
         {
             _startPlayerData = startPlayerData;
         }
 
-        protected override PlayerData GetOriginData()
+        protected override PlayerCurrency GetOriginData()
         {
-            return new PlayerData()
+            return new PlayerCurrency
             {
                 Gold = _startPlayerData.DefaultGoldAmount,
-                Wins = 0,
-                Losses = 0
             };
         }
     }

@@ -16,7 +16,7 @@ namespace _Project.Develop.Runtime.Utilities.Factories
             _container = container;
         }
 
-        public MetaCycle CreateMetaCycle()
+        public MetaCycle Create()
         {
             SelectGameModeArgsService selectGameModeArgsService = _container.Resolve<SelectGameModeArgsService>();
             PlayerProgressPrinter playerProgressPrinter = _container.Resolve<PlayerProgressPrinter>();

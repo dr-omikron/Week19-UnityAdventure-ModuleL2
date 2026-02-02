@@ -41,7 +41,7 @@ namespace _Project.Develop.Runtime.Gameplay.Infrastructure
             _objectsUpdater.Add(gameplayPlayerInputs);
             
             GameCycleFactory gameCycleFactory = _container.Resolve<GameCycleFactory>();
-            _gameCycle = gameCycleFactory.CreateGameCycle(_inputArgs);
+            _gameCycle = gameCycleFactory.Create(_inputArgs);
 
             yield return null;
         }

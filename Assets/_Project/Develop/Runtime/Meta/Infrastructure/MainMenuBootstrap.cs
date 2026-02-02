@@ -29,9 +29,9 @@ namespace _Project.Develop.Runtime.Meta.Infrastructure
             _mainMenuPlayerInputs = _container.Resolve<MainMenuPlayerInputs>();
 
             _objectsUpdater.Add(_mainMenuPlayerInputs);
-            
+
             MetaCycleFactory factory = _container.Resolve<MetaCycleFactory>();
-            _metaCycle = factory.CreateMetaCycle();
+            _metaCycle = factory.Create();
 
             yield return null;
         }

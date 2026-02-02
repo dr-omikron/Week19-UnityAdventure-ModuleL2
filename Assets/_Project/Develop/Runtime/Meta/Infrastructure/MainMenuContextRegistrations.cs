@@ -2,6 +2,8 @@
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Meta.Features;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using _Project.Develop.Runtime.Utilities.Factories;
 
 namespace _Project.Develop.Runtime.Meta.Infrastructure
@@ -10,7 +12,6 @@ namespace _Project.Develop.Runtime.Meta.Infrastructure
     {
         public static void Process(DIContainer container)
         {
-
             container.RegisterAsSingle(CreateMainMenuPlayerInputs);
             container.RegisterAsSingle(CreateSelectGameModeService);
             container.RegisterAsSingle(CreatePlayerProgressPrinter);
@@ -38,12 +39,18 @@ namespace _Project.Develop.Runtime.Meta.Infrastructure
 
         private static PlayerProgressRemover CreatePlayerProgressRemover(DIContainer c)
         {
-            PlayerProgressTracker playerProgressTracker = c.Resolve<PlayerProgressTracker>();
-            WalletService walletService = c.Resolve<WalletService>();
             MainMenuPlayerInputs mainMenuPlayerInputs = c.Resolve<MainMenuPlayerInputs>();
             ConfigsProviderService configsProviderService = c.Resolve<ConfigsProviderService>();
-
-            return new PlayerProgressRemover(playerProgressTracker, walletService, mainMenuPlayerInputs, configsProviderService);
+            WalletService walletService = c.Resolve<WalletService>();
+            PlayerStatisticProvider playerStatisticProvider = c.Resolve<PlayerStatisticProvider>();
+            SaveLoadDataProvidersService saveLoadDataProvidersService = c.Resolve<SaveLoadDataProvidersService>();
+            
+            return new PlayerProgressRemover(
+                mainMenuPlayerInputs,
+                configsProviderService,
+                walletService,
+                playerStatisticProvider,
+                saveLoadDataProvidersService);
         }
 
         private static MetaCycleFactory CreateMetaCycleFactory(DIContainer c) => new MetaCycleFactory(c);

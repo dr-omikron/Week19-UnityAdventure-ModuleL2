@@ -1,36 +1,40 @@
 ﻿using System;
 using _Project.Develop.Runtime.Gameplay.Configs;
-using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Meta.Infrastructure;
 using _Project.Develop.Runtime.Utilities.ConfigsManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using UnityEngine;
 
 namespace _Project.Develop.Runtime.Meta.Features
 {
     public class PlayerProgressRemover : IDisposable
     {
-        private readonly PlayerProgressTracker _playerProgressTracker;
+        private readonly PlayerStatisticProvider _playerStatisticProvider;
         private readonly WalletService _walletService;
         private readonly MainMenuPlayerInputs _mainMenuPlayerInputs;
         private readonly LevelConfig _levelConfig;
+        private readonly SaveLoadDataProvidersService _saveLoadDataProvidersService;
 
         public PlayerProgressRemover(
-            PlayerProgressTracker playerProgressTracker, 
-            WalletService walletService, 
             MainMenuPlayerInputs mainMenuPlayerInputs,
-            ConfigsProviderService configsProviderService)
+            ConfigsProviderService configsProviderService,
+            WalletService walletService,
+            PlayerStatisticProvider playerStatisticProvider,
+            SaveLoadDataProvidersService saveLoadDataProvidersService) 
         {
-            _playerProgressTracker = playerProgressTracker;
-            _walletService = walletService;
             _mainMenuPlayerInputs = mainMenuPlayerInputs;
+            _playerStatisticProvider = playerStatisticProvider;
+            _walletService = walletService;
+            _saveLoadDataProvidersService = saveLoadDataProvidersService;
             _levelConfig = configsProviderService.GetConfig<LevelConfig>();
 
             _mainMenuPlayerInputs.ResetProgressKeyDown += Remove;
         }
 
-        public void Remove()
+        private void Remove()
         {
-            if(_playerProgressTracker.IsNotZeroProgress() == false)
+            if(_playerStatisticProvider.IsNotZeroProgress() == false)
             {
                 Debug.Log("Прогресс уже сброшен");
                 return;
@@ -39,7 +43,9 @@ namespace _Project.Develop.Runtime.Meta.Features
             if (_walletService.Enough(_levelConfig.ResetPrice))
             {
                 _walletService.Spend(_levelConfig.ResetPrice);
-                _playerProgressTracker.ResetProgress();
+                _playerStatisticProvider.Reset();
+                _saveLoadDataProvidersService.SaveAll();
+
                 Debug.Log($"Прогресс успешно сброшен, с кошелька списано { _levelConfig.ResetPrice } золота. Баланс - { _walletService.Gold.Value }");
             }
             else

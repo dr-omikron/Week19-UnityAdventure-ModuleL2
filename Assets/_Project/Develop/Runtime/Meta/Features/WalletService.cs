@@ -1,15 +1,19 @@
 using System;
+using _Project.Develop.Runtime.Utilities.DataManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using _Project.Develop.Runtime.Utilities.Reactive;
 
 namespace _Project.Develop.Runtime.Meta.Features
 {
-    public class WalletService
+    public class WalletService : IDataReader<PlayerCurrency>, IDataWriter<PlayerCurrency>
     {
         private readonly ReactiveVariable<int> _gold;
 
-        public WalletService(ReactiveVariable<int> gold)
+        public WalletService(ReactiveVariable<int> gold, PlayerCurrencyProvider playerCurrencyProvider)
         {
             _gold = gold;
+            playerCurrencyProvider.RegisterReader(this);
+            playerCurrencyProvider.RegisterWriter(this);
         }
 
         public IReadOnlyVariable<int> Gold => _gold;
@@ -42,5 +46,9 @@ namespace _Project.Develop.Runtime.Meta.Features
         }
 
         public void Reset() => _gold.Value = 0;
+
+        public void ReadFrom(PlayerCurrency currency) => _gold.Value = currency.Gold;
+
+        public void WriteTo(PlayerCurrency currency) => currency.Gold = _gold.Value;
     }
 }

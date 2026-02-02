@@ -1,5 +1,4 @@
-﻿using _Project.Develop.Runtime.Gameplay.Configs;
-using _Project.Develop.Runtime.Gameplay.Features;
+﻿using _Project.Develop.Runtime.Gameplay.Features;
 using _Project.Develop.Runtime.Infrastructure.DI;
 using _Project.Develop.Runtime.Meta.Configs;
 using _Project.Develop.Runtime.Meta.Features;
@@ -34,6 +33,7 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreatePlayerProgressTracker);
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
             container.RegisterAsSingle(CreatePlayerDataProvider);
+            container.RegisterAsSingle(CreatePlayerStatisticProvider);
         }
 
         private static CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
@@ -75,9 +75,11 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
 
         private static ObjectsUpdater CreateObjectsUpdater(DIContainer c) => new ObjectsUpdater();
 
-        private static WalletService CreateWalletService(DIContainer c) => new WalletService(new ReactiveVariable<int>());
+        private static WalletService CreateWalletService(DIContainer c)
+            => new WalletService(new ReactiveVariable<int>(), c.Resolve<PlayerCurrencyProvider>());
 
-        private static PlayerProgressTracker CreatePlayerProgressTracker(DIContainer c) => new PlayerProgressTracker();
+        private static PlayerProgressTracker CreatePlayerProgressTracker(DIContainer c) 
+            => new PlayerProgressTracker(c.Resolve<PlayerStatisticProvider>());
 
         private static SaveLoadService CreateSaveLoadService(DIContainer c)
         {
@@ -91,12 +93,27 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
             return new SaveLoadService(dataSerializer, dataKeyStorage, dataRepository);
         }
 
-        private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)
+        private static PlayerCurrencyProvider CreatePlayerDataProvider(DIContainer c)
         {
             ISaveLoadService saveLoadService = c.Resolve<ISaveLoadService>();
             StartPlayerDataConfig startPlayerData = c.Resolve<ConfigsProviderService>().GetConfig<StartPlayerDataConfig>();
 
-            return new PlayerDataProvider(saveLoadService, startPlayerData);
+            return new PlayerCurrencyProvider(saveLoadService, startPlayerData);
+        }
+
+        private static PlayerStatisticProvider CreatePlayerStatisticProvider(DIContainer c)
+        {
+            ISaveLoadService saveLoadService = c.Resolve<ISaveLoadService>();
+            return new PlayerStatisticProvider(saveLoadService);
+        }
+
+        private static SaveLoadDataProvidersService CreateSavingFilesCheckService(DIContainer c)
+        {
+            PlayerCurrencyProvider playerCurrencyProvider = c.Resolve<PlayerCurrencyProvider>();
+            PlayerStatisticProvider playerStatisticProvider = c.Resolve<PlayerStatisticProvider>();
+            ICoroutinesPerformer coroutinesPerformer = c.Resolve<ICoroutinesPerformer>();
+
+            return new SaveLoadDataProvidersService(playerCurrencyProvider,  playerStatisticProvider, coroutinesPerformer);
         }
     }
 }

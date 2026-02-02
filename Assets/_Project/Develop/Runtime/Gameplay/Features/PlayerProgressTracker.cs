@@ -1,33 +1,31 @@
-﻿using System;
+﻿using _Project.Develop.Runtime.Utilities.DataManagement;
+using _Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 
 namespace _Project.Develop.Runtime.Gameplay.Features
 {
-    public class PlayerProgressTracker
+    public class PlayerProgressTracker : IDataReader<PlayerStatistic>, IDataWriter<PlayerStatistic>
     {
+        public PlayerProgressTracker(PlayerStatisticProvider playerStatisticProvider)
+        {
+            playerStatisticProvider.RegisterReader(this);
+            playerStatisticProvider.RegisterWriter(this);
+        }
         public int Wins { get; private set; }
         public int Losses { get; private set; }
 
         public void AddWin() => Wins++;
         public void AddLoss() => Losses++;
 
-        public void ResetProgress()
+        public void ReadFrom(PlayerStatistic data)
         {
-            Wins = 0;
-            Losses = 0;
+            Wins = data.Wins;
+            Losses = data.Losses;
         }
 
-        public bool IsNotZeroProgress() => Losses != 0 || Wins != 0;
-
-        public void SetProgress(int wins, int losses)
+        public void WriteTo(PlayerStatistic data)
         {
-            if(wins < 0)
-                throw new ArgumentOutOfRangeException(nameof(wins), "The progress cannot be negative");
-
-            if(losses < 0)
-                throw new ArgumentOutOfRangeException(nameof(losses), "The progress cannot be negative");
-
-            Wins = wins;
-            Losses = losses;
+            data.Wins = Wins;
+            data.Losses = Losses;
         }
     }
 }
