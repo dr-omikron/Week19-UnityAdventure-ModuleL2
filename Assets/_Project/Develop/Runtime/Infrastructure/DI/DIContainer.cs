@@ -16,13 +16,15 @@ namespace _Project.Develop.Runtime.Infrastructure.DI
 
         public DIContainer() : this(null) {}
 
-        public void RegisterAsSingle<T>(Func<DIContainer, T> creator)
+        public IRegistrationOptions RegisterAsSingle<T>(Func<DIContainer, T> creator)
         {
             if(IsAlreadyRegistered<T>())
                 throw new InvalidOperationException($"Duplicate registration of type {typeof(T)}");
 
             Registration registration = new Registration(container => creator.Invoke(container));
             _container.Add(typeof(T), registration);
+
+            return registration;
         }
 
         public bool IsAlreadyRegistered<T>()
@@ -57,6 +59,15 @@ namespace _Project.Develop.Runtime.Infrastructure.DI
             }
 
             throw new InvalidOperationException($"Could not resolve type {typeof(T)}");
+        }
+
+        public void Initialize()
+        {
+            foreach (Registration registration in _container.Values)
+            {
+                if (registration.IsNonLazy)
+                    registration.CreateInstanceFrom(this);
+            }
         }
     }
 }

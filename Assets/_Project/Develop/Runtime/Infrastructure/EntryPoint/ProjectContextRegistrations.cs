@@ -29,11 +29,12 @@ namespace _Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle<ILoadingScreen>(CreateLoadingScreen);
             container.RegisterAsSingle(CreateSceneSwitcherService);
             container.RegisterAsSingle(CreateObjectsUpdater);
-            container.RegisterAsSingle(CreateWalletService);
-            container.RegisterAsSingle(CreatePlayerProgressTracker);
+            container.RegisterAsSingle(CreateWalletService).NonLazy();
+            container.RegisterAsSingle(CreatePlayerProgressTracker).NonLazy();
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
             container.RegisterAsSingle(CreatePlayerDataProvider);
             container.RegisterAsSingle(CreatePlayerStatisticProvider);
+            container.RegisterAsSingle(CreateSavingFilesCheckService);
         }
 
         private static CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
